@@ -1,8 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _POSIX_C_SOURCE 200809L
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "pTree.h"
+
 
 #define NONE 0x00
 #define PENICILLIN 0x01
@@ -215,7 +218,7 @@ Patient* createPatient(char* name, char* ID, char* allergiesStr) {
         exit(EXIT_FAILURE); // Handle the error appropriately
     }
 
-    patient->name = _strdup(name);
+    patient->name = strdup(name);
     strncpy(patient->ID, ID, 10);
     /* Rotem remove - no need a ID is char[] 
     for (int i = 0; i < 10; i++) {//Rotem: why not use atoi
@@ -236,7 +239,7 @@ Doc* createDoc(char* name, char* nLicense) {
         exit(EXIT_FAILURE); // Handle the error appropriately
     }
 
-    doctor->name = _strdup(name);
+    doctor->name = strdup(name);
     for (int i = 0; i < 8; i++) {//Rotem: what for?
         doctor->nLicense[i] = nLicense[i] - '0';
     }
@@ -256,7 +259,7 @@ Visit* createVisit(char* arrival, char* dismissed, char* duration, Doc* doctor, 
     parseDate(&visit->tDismissed, dismissed); //Rotem: I changed the function signiture;
     visit->fDuration = parseDuration(duration);
     visit->Doctor = doctor;
-    visit->vSummary = summary[0] == '\0' ? NULL : _strdup(summary);
+    visit->vSummary = summary[0] == '\0' ? NULL : strdup(summary);
     if (summary[0] != '\0' && visit->vSummary == NULL) {//Rotem: check this again, it is valid that there is no summary
         fprintf(stderr, "Memory allocation failed while duplicating visit summary\n");
         free(visit);
@@ -336,7 +339,7 @@ int menu()
         "12 : Close the hospital\n"
         "0 : Exit program\n"
     );
-    int err = scanf_s("%d", &answer);
+    int err = scanf("%d", &answer);
     if (err <= 0 || answer <= 0) //failure in reading
     {
         //clean_stdin(); //flush extra chars in consule

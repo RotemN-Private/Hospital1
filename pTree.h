@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Common.h"
+#include "common.h"
 
 /*
 Binary Search Tree 
